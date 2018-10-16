@@ -1,0 +1,7 @@
+bin/
+build/
+*.bin
+*.lock
+.gradle/buildOutputCleanup/cache.properties
+.gradle/vcsWorkingDirs/gc.properties
+.settings/org.eclipse.buildship.core.prefs
