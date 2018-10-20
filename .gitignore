@@ -1,10 +1,7 @@
-
+bin/
+build/
 .gradle/4.9/fileHashes/fileHashes.bin
 .gradle/4.9/fileHashes/fileHashes.lock
-.gradle/4.9/fileHashes/fileHashes.bin
-.gradle/4.9/taskHistory/taskHistory.bin
-.gradle/4.9/taskHistory/taskHistory.lock
-.gradle/buildOutputCleanup/buildOutputCleanup.lock
-.gradle/buildOutputCleanup/outputFiles.bin
 *.class
-build/libs/Tina-2019-Code.jar
+*.class
+*.bin

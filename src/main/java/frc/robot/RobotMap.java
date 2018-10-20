@@ -13,7 +13,8 @@ package frc.robot;
  * the wiring easier and significantly reduces the number of magic numbers
  * floating around.
  */
-public class RobotMap {
+public class RobotMap
+{
   // For example to map the left and right motors, you could define the
   // following variables to use with your drivetrain subsystem.
   // public static int leftMotor = 1;
@@ -28,6 +29,9 @@ public class RobotMap {
   public static int fl = 6;
   public static int br = 3;
   public static int bl = 8;
+
+  public static int intake1 = 1;
+  public static int intake2 = 2;
 
   // public static int FRMotor=4;
   // public static int BRMotor=3;

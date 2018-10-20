@@ -7,13 +7,16 @@
 
 package frc.robot;
 
+import frc.robot.utilities.DirectionalButton;
 import frc.robot.utilities.LogitechF310;
+import frc.robot.commands.*;
 
 /**
  * This class is the glue that binds the controls on the physical operator
  * interface to the commands and command groups that allow control of the robot.
  */
-public class OI {
+public class OI
+{
   //// CREATING BUTTONS
   // One type of button is a joystick button which is any button on a
   //// joystick.
@@ -42,8 +45,11 @@ public class OI {
   // until it is finished as determined by it's isFinished method.
   // button.whenReleased(new ExampleCommand());
   public static LogitechF310 driver = new LogitechF310(0);
+
   public OI()
   {
-    
+    // Intake button = Button a
+    driver.buttonA.whenPressed(new IntakeCommand(1));
+    driver.buttonA.whenReleased(new IntakeCommand(0));
   }
 }

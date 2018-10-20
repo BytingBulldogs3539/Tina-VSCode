@@ -14,17 +14,14 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 import frc.robot.utilities.Drive;
 
-/**
- * Add your docs here.
- */
-public class DriveTrain extends Subsystem {
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
+public class DriveTrain extends Subsystem
+{
 
   public TalonSRX fr, fl, br, bl;
   public Drive drive;
 
-  public DriveTrain() {
+  public DriveTrain()
+  {
     fr = new TalonSRX(RobotMap.fr);
     fl = new TalonSRX(RobotMap.fl);
     br = new TalonSRX(RobotMap.br);
@@ -44,7 +41,8 @@ public class DriveTrain extends Subsystem {
     drive.driveArcade(0, 0);
   }
 
-  private void setupMotorController(TalonSRX srx) {
+  private void setupMotorController(TalonSRX srx)
+  {
     srx.configNominalOutputForward(0, 0);
     srx.configNominalOutputReverse(0, 0);
     srx.configPeakOutputForward(1, 0);
@@ -55,12 +53,14 @@ public class DriveTrain extends Subsystem {
     // srx.configPeakCurrentDuration(100, 0);
   }
 
-  public void arcadeDrive(double speed, double turn) {
+  public void arcadeDrive(double speed, double turn)
+  {
     drive.driveArcade(speed, turn);
   }
 
   @Override
-  public void initDefaultCommand() {
+  public void initDefaultCommand()
+  {
     setDefaultCommand(new DriveCommand());
   }
 }
