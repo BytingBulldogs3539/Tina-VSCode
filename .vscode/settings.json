@@ -1,4 +1,5 @@
 {
   "java.configuration.updateBuildConfiguration": "automatic",
-  "wpilib.online": true
+  "wpilib.online": true,
+  "java.format.settings.url": "C:\\Users\\3539\\Documents\\Visual Studio 2017\\Eclipse.xml"
 }

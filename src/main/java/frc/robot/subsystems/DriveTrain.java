@@ -63,4 +63,27 @@ public class DriveTrain extends Subsystem
   {
     setDefaultCommand(new DriveCommand());
   }
+
+  public double Intoenc(double inches)
+  {
+    return RobotMap.wheelCir/inches*4096;
+  }
+
+  //public void
+
+  public void setPIDF(double p, double i, double d, double f)
+  {
+    fr.config_kP(0, p, 0);
+    fl.config_kP(0, p, 0);
+
+    fr.config_kI(0, i, 0);
+    fl.config_kI(0, i, 0);
+
+    fr.config_kD(0, d, 0);
+    fl.config_kD(0, d, 0);
+    
+    fr.config_kF(0, f, 0);
+    fl.config_kF(0, f, 0);
+    
+  }
 }

@@ -30,8 +30,13 @@ public class RobotMap
   public static int br = 3;
   public static int bl = 8;
 
-  public static int intake1 = 1;
-  public static int intake2 = 2;
+  public static int intake1 = 5;
+  public static int intake2 = 4;
+
+  public static int shooter1 = 1;
+  public static int shooter2 = 2;
+
+  public static double wheelCir = 12.56;
 
   // public static int FRMotor=4;
   // public static int BRMotor=3;

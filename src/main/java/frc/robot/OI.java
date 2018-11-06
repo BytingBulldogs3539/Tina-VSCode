@@ -7,7 +7,6 @@
 
 package frc.robot;
 
-import frc.robot.utilities.DirectionalButton;
 import frc.robot.utilities.LogitechF310;
 import frc.robot.commands.*;
 

@@ -24,6 +24,7 @@ public class IntakeCommand extends Command
   @Override
   protected void initialize()
   {
+    System.out.println("TEST");
     Robot.intake.setIntakeSpeed(this.intakeSpeed);
   }
 
@@ -37,7 +38,7 @@ public class IntakeCommand extends Command
   @Override
   protected boolean isFinished()
   {
-    return true;
+    return false;
   }
 
   // Called once after isFinished returns true
