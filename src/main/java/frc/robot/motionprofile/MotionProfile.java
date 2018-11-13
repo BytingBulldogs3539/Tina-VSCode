@@ -29,7 +29,7 @@ import com.ctre.phoenix.motorcontrol.IMotorController;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
 
 import com.ctre.phoenix.motion.*;
@@ -172,6 +172,7 @@ public class MotionProfile {
 		} else {
 			/* our timeout is nonzero */
 			if (_loopTimeout == 0) {
+
 				/*
 				 * something is wrong. Talon is not present, unplugged, breaker tripped
 				 */
@@ -245,7 +246,7 @@ public class MotionProfile {
 					_state = 0;
 					_loopTimeout = -1;
 					if (_status.isUnderrun) {
-						System.out.println("yeah----------");
+						System.out.println("Motion Profile Is Under Run (this is good).");
 
 					}
 				}

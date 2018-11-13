@@ -17,7 +17,6 @@ import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
 public class AutonDrivePathCommand extends Command {
 
-
   boolean bMoveForward;
   MotionProfile motion;
 
@@ -31,17 +30,20 @@ public class AutonDrivePathCommand extends Command {
   @Override
   protected void initialize() {
     motion.reset();
-		Robot.driveTrain.initMotionProfile();
-	  motion.start(bMoveForward);
+    Robot.driveTrain.initMotionProfile();
+    motion.start(bMoveForward);
   }
 
   @Override
   protected void execute() {
     Robot.driveTrain.fr.set(ControlMode.MotionProfileArc, motion.getSetValue().value);
-			Robot.driveTrain.fl.follow(Robot.driveTrain.fr, FollowerType.AuxOutput1);
-		
-		/* call this periodically, and catch the output.  Only apply it if user wants to run MP. */
-		motion.control();
+    Robot.driveTrain.fl.follow(Robot.driveTrain.fr, FollowerType.AuxOutput1);
+
+    /*
+     * call this periodically, and catch the output. Only apply it if user wants to
+     * run MP.
+     */
+    motion.control();
   }
 
   @Override
@@ -50,8 +52,7 @@ public class AutonDrivePathCommand extends Command {
   }
 
   @Override
-  protected void end() 
-  {
+  protected void end() {
     Robot.driveTrain.neutralMotors();
   }
 
