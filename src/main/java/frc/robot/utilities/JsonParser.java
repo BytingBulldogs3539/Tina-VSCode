@@ -6,8 +6,6 @@
 
 package frc.robot.utilities;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import java.io.File;
 
 import org.json.JSONArray;
@@ -15,9 +13,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import java.io.BufferedReader;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 
 public final class JsonParser {
 
@@ -51,7 +47,6 @@ public final class JsonParser {
 			}
 			return data;
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
@@ -67,10 +62,12 @@ public final class JsonParser {
 				sb.append(line);
 				line = br.readLine();
 			}
+			br.close();
 			result = sb.toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
 		return result;
 	}
 }
