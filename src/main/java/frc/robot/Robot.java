@@ -13,9 +13,11 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autons.Auton;
+import frc.robot.motionprofile.MotionGains;
+import frc.robot.motionprofile.MotionProfile;
+import frc.robot.motionprofile.MotionProfileConstants;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
+//import frc.robot.subsystems.Intake;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,11 +26,17 @@ import frc.robot.subsystems.Shooter;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends TimedRobot
+{
+
+  // ToDo: On init add pid values to smart dash.
+  // ToDo: on start of motion profile get the values from the smart dashboard
+
   public static OI m_oi;
   public static DriveTrain driveTrain = new DriveTrain();
-  public static Intake intake = new Intake();
-  public static Shooter shooter = new Shooter();
+
+  // public static Intake intake = new Intake();
+  // public static Shooter shooter = new Shooter();
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -38,7 +46,8 @@ public class Robot extends TimedRobot {
    * for any initialization code.
    */
   @Override
-  public void robotInit() {
+  public void robotInit()
+  {
     m_oi = new OI();
     driveTrain = new DriveTrain();
     m_chooser.addObject("My Auto", new Auton());
@@ -55,9 +64,8 @@ public class Robot extends TimedRobot {
    * and SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {
-    // test
-    // TEST2\//..
+  public void robotPeriodic()
+  {
 
   }
 
@@ -67,11 +75,13 @@ public class Robot extends TimedRobot {
    * robot is disabled.
    */
   @Override
-  public void disabledInit() {
+  public void disabledInit()
+  {
   }
 
   @Override
-  public void disabledPeriodic() {
+  public void disabledPeriodic()
+  {
     Scheduler.getInstance().run();
   }
 
@@ -88,8 +98,9 @@ public class Robot extends TimedRobot {
    * the switch structure below with additional strings & commands.
    */
   @Override
-  public void autonomousInit() {
-    m_autonomousCommand = m_chooser.getSelected();
+  public void autonomousInit()
+  {
+    m_autonomousCommand = new Auton();
 
     /*
      * String autoSelected = SmartDashboard.getString("Auto Selector", "Default");
@@ -99,7 +110,8 @@ public class Robot extends TimedRobot {
      */
 
     // schedule the autonomous command (example)
-    if (m_autonomousCommand != null) {
+    if (m_autonomousCommand != null)
+    {
       m_autonomousCommand.start();
     }
   }
@@ -108,17 +120,20 @@ public class Robot extends TimedRobot {
    * This function is called periodically during autonomous.
    */
   @Override
-  public void autonomousPeriodic() {
+  public void autonomousPeriodic()
+  {
     Scheduler.getInstance().run();
   }
 
   @Override
-  public void teleopInit() {
+  public void teleopInit()
+  {
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    if (m_autonomousCommand != null) {
+    if (m_autonomousCommand != null)
+    {
       m_autonomousCommand.cancel();
     }
   }
@@ -127,7 +142,8 @@ public class Robot extends TimedRobot {
    * This function is called periodically during operator control.
    */
   @Override
-  public void teleopPeriodic() {
+  public void teleopPeriodic()
+  {
     Scheduler.getInstance().run();
   }
 
@@ -135,6 +151,53 @@ public class Robot extends TimedRobot {
    * This function is called periodically during test mode.
    */
   @Override
-  public void testPeriodic() {
+  public void testPeriodic()
+  {
+  }
+
+  public static void smartInit()
+  {/*
+    * public static MotionGains kGains_Distanc = new MotionGains(0.1, 0.0, 0.0,
+    * 0.0, 100, 0.50); public static MotionGains kGains_Turning = new
+    * MotionGains(3.2, 0, 15, 0.0, 200, 1.00); public static MotionGains
+    * kGains_Velocit = new MotionGains(0.04, 0.0, 20.0, 1023.0 / 2300.0, 300,
+    * 0.50); measured 6800 velocity units at full motor output public static
+    * MotionGains kGains_MotProf = new MotionGains(.2, 0.0, 0.0, 1023.0 / 2300.0,
+    * 400, 1.00);
+    */
+    SmartDashboard.putNumberArray("Distanc", gainsToArray(MotionProfileConstants.kGains_Distanc));
+    SmartDashboard.putNumberArray("Turning", gainsToArray(MotionProfileConstants.kGains_Turning));
+    SmartDashboard.putNumberArray("Velocit", gainsToArray(MotionProfileConstants.kGains_Velocit));
+    SmartDashboard.putNumberArray("MotProf", gainsToArray(MotionProfileConstants.kGains_MotProf));
+  }
+
+  public static double[] gainsToArray(MotionGains Gains)
+  {
+    double[] arr = new double[6];
+    arr[0] = Gains.kP;
+    arr[1] = Gains.kI;
+    arr[2] = Gains.kD;
+    arr[3] = Gains.kF;
+    arr[4] = Gains.kIzone;
+    arr[5] = Gains.kPeakOutput;
+    return arr;
+  }
+
+  public static MotionGains arrayToGains(double[] arr)
+  {
+
+    double kP = 0, kI = 0, kD = 0, kF = 0, kIzone = 0, kPeakOutput = 0;
+
+    if (arr.length == 6)
+    {
+      kP = arr[0];
+      kI = arr[1];
+      kD = arr[2];
+      kF = arr[3];
+      kIzone = arr[4];
+      kPeakOutput = arr[5];
+    }
+
+    return new MotionGains(kP, kI, kD, kF, kIzone, kPeakOutput);
   }
 }

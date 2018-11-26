@@ -35,7 +35,8 @@ import frc.robot.Robot;
 import com.ctre.phoenix.motion.*;
 import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 
-public class MotionProfile {
+public class MotionProfile
+{
 
 	/**
 	 * The status of the motion profile executer and buffer inside the Talon.
@@ -102,8 +103,10 @@ public class MotionProfile {
 	 * duration of your trajectory points. So if they are firing every 20ms, you
 	 * should call every 10ms.
 	 */
-	class PeriodicRunnable implements java.lang.Runnable {
-		public void run() {
+	class PeriodicRunnable implements java.lang.Runnable
+	{
+		public void run()
+		{
 			_motorController.processMotionProfileBuffer();
 		}
 	}
@@ -113,9 +116,12 @@ public class MotionProfile {
 	/**
 	 * C'tor
 	 * 
-	 * @param talon reference to Talon object to fetch motion profile status from.
+	 * @param talon
+	 *                  reference to Talon object to fetch motion profile status
+	 *                  from.
 	 */
-	public MotionProfile(IMotorController motorController, double[][] profile) {
+	public MotionProfile(IMotorController motorController, double[][] profile)
+	{
 		_motorController = motorController;
 		points = profile;
 		numPoints = profile.length;
@@ -130,7 +136,8 @@ public class MotionProfile {
 	 * Called to clear Motion profile buffer and reset state info during disabled
 	 * and when Talon is not in MP control mode.
 	 */
-	public void reset() {
+	public void reset()
+	{
 		/*
 		 * Let's clear the buffer just in case user decided to disable in the middle of
 		 * an MP, and now we have the second half of a profile just sitting in memory.
@@ -148,7 +155,8 @@ public class MotionProfile {
 		_bStart = false;
 	}
 
-	boolean IsMotionProfile(ControlMode controlMode) {
+	boolean IsMotionProfile(ControlMode controlMode)
+	{
 		if (controlMode == ControlMode.MotionProfile)
 			return true;
 		if (controlMode == ControlMode.MotionProfileArc)
@@ -159,7 +167,8 @@ public class MotionProfile {
 	/**
 	 * Called every loop.
 	 */
-	public void control() {
+	public void control()
+	{
 		/* Get the motion profile status every loop */
 		_motorController.getMotionProfileStatus(_status);
 
@@ -167,36 +176,47 @@ public class MotionProfile {
 		 * track time, this is rudimentary but that's okay, we just want to make sure
 		 * things never get stuck.
 		 */
-		if (_loopTimeout < 0) {
+		if (_loopTimeout < 0)
+		{
 			/* do nothing, timeout is disabled */
-		} else {
+		}
+		else
+		{
 			/* our timeout is nonzero */
-			if (_loopTimeout == 0) {
+			if (_loopTimeout == 0)
+			{
 
 				/*
 				 * something is wrong. Talon is not present, unplugged, breaker tripped
 				 */
-			} else {
+			}
+			else
+			{
 				--_loopTimeout;
 			}
 		}
 
 		/* first check if we are in MP mode */
-		if (false == IsMotionProfile(_motorController.getControlMode())) {
+		if (false == IsMotionProfile(_motorController.getControlMode()))
+		{
 			/*
 			 * we are not in MP mode. We are probably driving the robot around using
 			 * gamepads or some other mode.
 			 */
 			_state = 0;
 			_loopTimeout = -1;
-		} else {
+		}
+		else
+		{
 			/*
 			 * we are in MP control mode. That means: starting Mps, checking Mp progress,
 			 * and possibly interrupting MPs if thats what you want to do.
 			 */
-			switch (_state) {
+			switch (_state)
+			{
 			case 0: /* wait for application to tell us to start an MP */
-				if (_bStart) {
+				if (_bStart)
+				{
 					_bStart = false;
 
 					_setValue = SetValueMotionProfile.Disable;
@@ -214,7 +234,8 @@ public class MotionProfile {
 					 * wait for MP to stream to Talon, really just the first few points
 					 */
 				/* do we have a minimum numberof points in Talon */
-				if (_status.btmBufferCnt > kMinPointsInTalon) {
+				if (_status.btmBufferCnt > kMinPointsInTalon)
+				{
 					/* start (once) the motion profile */
 					_setValue = SetValueMotionProfile.Enable;
 					/* MP will start once the control frame gets scheduled */
@@ -228,14 +249,21 @@ public class MotionProfile {
 				 * this is so that you can unplug your talon in the middle of an MP and react to
 				 * it.
 				 */
-				if (_status.isUnderrun == false) {
+				if (_status.isUnderrun == false)
+				{
 					_loopTimeout = kNumLoopsTimeout;
+				}
+				if (_status.isUnderrun)
+				{
+					System.out.println("Motion Profile Is Under Run (this is good).");
+
 				}
 				/*
 				 * If we are executing an MP and the MP finished, start loading another. We will
 				 * go into hold state so robot servo's position.
 				 */
-				if (_status.activePointValid && _status.isLast) {
+				if (_status.activePointValid && _status.isLast)
+				{
 					/*
 					 * because we set the last point's isLast to true, we will get here when the MP
 					 * is done
@@ -245,10 +273,7 @@ public class MotionProfile {
 					_setValue = SetValueMotionProfile.Hold;
 					_state = 0;
 					_loopTimeout = -1;
-					if (_status.isUnderrun) {
-						System.out.println("Motion Profile Is Under Run (this is good).");
 
-					}
 				}
 				break;
 			}
@@ -259,6 +284,17 @@ public class MotionProfile {
 			_pos = _motorController.getActiveTrajectoryPosition();
 			_vel = _motorController.getActiveTrajectoryVelocity();
 
+			// We are going to report all of these values to the smartdash for tuning the
+			// pid.
+
+			SmartDashboard.putBoolean("Last Point", _status.isLast);
+			SmartDashboard.putNumber("BTM Buffer Count", _status.btmBufferCnt);
+			SmartDashboard.putNumber("Top Buffer Count", _status.topBufferCnt);
+			SmartDashboard.putBoolean("Is Under Run", _status.isUnderrun);
+
+			SmartDashboard.putNumber("_pos", _pos);
+			SmartDashboard.putNumber("_vel", _vel);
+			SmartDashboard.putNumber("_heading", _heading);
 		}
 	}
 
@@ -268,13 +304,15 @@ public class MotionProfile {
 	 * @param durationMs
 	 * @return enum equivalent of durationMs
 	 */
-	private TrajectoryDuration GetTrajectoryDuration(int durationMs) {
+	private TrajectoryDuration GetTrajectoryDuration(int durationMs)
+	{
 		/* create return value */
 		TrajectoryDuration retval = TrajectoryDuration.Trajectory_Duration_0ms;
 		/* convert duration to supported type */
 		retval = retval.valueOf(durationMs);
 		/* check that it is valid */
-		if (retval.value != durationMs) {
+		if (retval.value != durationMs)
+		{
 			DriverStation.reportError(
 					"Trajectory Duration not supported - use configMotionProfileTrajectoryPeriod instead", false);
 		}
@@ -283,15 +321,18 @@ public class MotionProfile {
 	}
 
 	/** Start filling the MPs to all of the involved Talons. */
-	private void startFilling() {
+	private void startFilling()
+	{
 		startFilling(points, numPoints);
 	}
 
-	private void startFilling(double[][] profile, int totalCnt) {
+	private void startFilling(double[][] profile, int totalCnt)
+	{
 		TrajectoryPoint point = new TrajectoryPoint();
 
 		/* did we get an underrun condition since last time we checked ? */
-		if (_status.hasUnderrun) {
+		if (_status.hasUnderrun)
+		{
 			/* better log it so we know about it */
 			/*
 			 * clear the error. This flag does not auto clear, this way we never miss
@@ -313,7 +354,8 @@ public class MotionProfile {
 				MotionProfileConstants.kTimeoutMs);
 
 		/* This is fast since it's just into our TOP buffer */
-		for (int i = 0; i < totalCnt; ++i) {
+		for (int i = 0; i < totalCnt; ++i)
+		{
 			double direction = _bForward ? +1 : -1;
 			double positionRot = profile[i][0];
 			double velocityRPM = profile[i][1];
@@ -346,7 +388,8 @@ public class MotionProfile {
 		}
 	}
 
-	public void zeroSensors() {
+	public void zeroSensors()
+	{
 		Robot.driveTrain.fl.getSensorCollection().setQuadraturePosition(0, MotionProfileConstants.kTimeoutMs);
 		Robot.driveTrain.fl.getSensorCollection().setQuadraturePosition(0, MotionProfileConstants.kTimeoutMs);
 		Robot.driveTrain._imu.setYaw(0, MotionProfileConstants.kTimeoutMs);
@@ -358,7 +401,8 @@ public class MotionProfile {
 	 * Called by application to signal Talon to start the buffered MP (when it's
 	 * able to).
 	 */
-	void start(boolean bForward) {
+	void start(boolean bForward)
+	{
 		_bStart = true;
 		_bForward = bForward;
 	}
@@ -369,7 +413,8 @@ public class MotionProfile {
 	 *         motion-profile output, 1 for enable motion-profile, 2 for hold
 	 *         current motion profile trajectory point.
 	 */
-	SetValueMotionProfile getSetValue() {
+	SetValueMotionProfile getSetValue()
+	{
 		return _setValue;
 	}
 }

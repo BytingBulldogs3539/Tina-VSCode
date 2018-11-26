@@ -8,31 +8,42 @@
 package frc.robot.Autons;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.utilities.JsonParser;
 import java.io.File;
+
+import frc.robot.Robot;
 import frc.robot.motionprofile.AutonDrivePathCommand;
+import frc.robot.motionprofile.MotionProfileConstants;
 
-public class Auton extends CommandGroup {
-  /**
-   * Add your docs here.
-   */
-  public Auton() {
-    // Add Commands here:
-    // e.g. addSequential(new Command1());
-    // addSequential(new Command2());
-    // these will run in order.
-
-    // To run multiple commands at the same time,
-    // use addParallel()
-    // e.g. addParallel(new Command1());
-    // addSequential(new Command2());
-    // Command1 and Command2 will run in parallel.
-
-    // A command group will require all of the subsystems that each member
-    // would require.
-    // e.g. if Command1 requires chassis, and Command2 requires arm,
-    // a CommandGroup containing them would require both the chassis and the
-    // arm.
-    addSequential(new AutonDrivePathCommand(JsonParser.RetrieveProfileData(new File("/home/lvuser/Motion_Profiles/test.json")),true));
-  }
+public class Auton extends CommandGroup
+{
+        /**
+         * Add your docs here.
+         */
+        public Auton()
+        {
+                MotionProfileConstants.kGains_Distanc = Robot.arrayToGains(SmartDashboard.getNumberArray("Distanc",
+                                Robot.gainsToArray(MotionProfileConstants.kGains_Distanc)));
+                MotionProfileConstants.kGains_Turning = Robot.arrayToGains(SmartDashboard.getNumberArray("Turning",
+                                Robot.gainsToArray(MotionProfileConstants.kGains_Turning)));
+                MotionProfileConstants.kGains_Velocit = Robot.arrayToGains(SmartDashboard.getNumberArray("Velocit",
+                                Robot.gainsToArray(MotionProfileConstants.kGains_Velocit)));
+                MotionProfileConstants.kGains_MotProf = Robot.arrayToGains(SmartDashboard.getNumberArray("MotProf",
+                                Robot.gainsToArray(MotionProfileConstants.kGains_MotProf)));
+                Robot.smartInit();
+                /*
+                 * SmartDashboard.putNumberArray("Distanc",
+                 * gainsToArray(MotionProfileConstants.kGains_Distanc));
+                 * SmartDashboard.putNumberArray("Turning",
+                 * gainsToArray(MotionProfileConstants.kGains_Turning));
+                 * SmartDashboard.putNumberArray("Velocit",
+                 * gainsToArray(MotionProfileConstants.kGains_Velocit));
+                 * SmartDashboard.putNumberArray("MotProf",
+                 * gainsToArray(MotionProfileConstants.kGains_MotProf));
+                 */
+                addSequential(new AutonDrivePathCommand(
+                                JsonParser.RetrieveProfileData(new File("/home/lvuser/Motion_Profiles/AUSA.json")),
+                                false));
+        }
 }

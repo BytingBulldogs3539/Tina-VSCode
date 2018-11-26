@@ -15,20 +15,25 @@ import java.io.BufferedReader;
 
 import java.io.FileReader;
 
-public final class JsonParser {
+public final class JsonParser
+{
 
-	public static double[][] RetrieveProfileData(File target) {
+	public static double[][] RetrieveProfileData(File target)
+	{
 
 		double[][] data = null;
 		String jsonData = readFile(target);
 		JSONObject jobj;
-		try {
+		try
+		{
 			jobj = new JSONObject(jsonData);
 			JSONArray jsonArray = new JSONArray(jobj.get("Data").toString());
 			data = new double[jsonArray.length()][4];
 
-			for (int i = 0; i < jsonArray.length(); i++) {
-				try {
+			for (int i = 0; i < jsonArray.length(); i++)
+			{
+				try
+				{
 
 					JSONObject object1 = jsonArray.getJSONObject(i);
 
@@ -41,30 +46,39 @@ public final class JsonParser {
 
 					data[i] = array;
 
-				} catch (Exception e) {
+				}
+				catch (Exception e)
+				{
 					e.printStackTrace();
 				}
 			}
 			return data;
-		} catch (JSONException e) {
+		}
+		catch (JSONException e)
+		{
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	public static String readFile(File filename) {
+	public static String readFile(File filename)
+	{
 		String result = "";
-		try {
+		try
+		{
 			BufferedReader br = new BufferedReader(new FileReader(filename));
 			StringBuilder sb = new StringBuilder();
 			String line = br.readLine();
-			while (line != null) {
+			while (line != null)
+			{
 				sb.append(line);
 				line = br.readLine();
 			}
 			br.close();
 			result = sb.toString();
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 		}
 

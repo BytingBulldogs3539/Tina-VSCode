@@ -10,32 +10,36 @@ package frc.robot.motionprofile;
 import edu.wpi.first.wpilibj.command.Command;
 import frc.robot.Robot;
 
-import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FollowerType;
-import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
-public class AutonDrivePathCommand extends Command {
+public class AutonDrivePathCommand extends Command
+{
 
   boolean bMoveForward;
   MotionProfile motion;
+  double[][] Profile;
 
-  public AutonDrivePathCommand(double[][] Profile, boolean forward) {
+  public AutonDrivePathCommand(double[][] Profile, boolean forward)
+  {
+    this.Profile = Profile;
     requires(Robot.driveTrain);
     bMoveForward = forward;
-
-    motion = new MotionProfile(Robot.driveTrain.fr, Profile);
+    System.out.println("ENNABLED");
   }
 
   @Override
-  protected void initialize() {
+  protected void initialize()
+  {
+    motion = new MotionProfile(Robot.driveTrain.fr, Profile);
     motion.reset();
     Robot.driveTrain.initMotionProfile();
     motion.start(bMoveForward);
   }
 
   @Override
-  protected void execute() {
+  protected void execute()
+  {
     Robot.driveTrain.fr.set(ControlMode.MotionProfileArc, motion.getSetValue().value);
     Robot.driveTrain.fl.follow(Robot.driveTrain.fr, FollowerType.AuxOutput1);
 
@@ -47,17 +51,20 @@ public class AutonDrivePathCommand extends Command {
   }
 
   @Override
-  protected boolean isFinished() {
+  protected boolean isFinished()
+  {
     return motion.finished;
   }
 
   @Override
-  protected void end() {
+  protected void end()
+  {
     Robot.driveTrain.neutralMotors();
   }
 
   @Override
-  protected void interrupted() {
+  protected void interrupted()
+  {
     end();
   }
 }

@@ -26,12 +26,12 @@ public class RobotMap
   // public static int rangefinderModule = 1;
 
   public static int fr = 4;
-  public static int fl = 6;
+  public static int fl = 7;
   public static int br = 3;
-  public static int bl = 8;
+  public static int bl = 6;
 
-  public static int intake1 = 5;
-  public static int intake2 = 4;
+  // public static int intake1 = 5;
+  // public static int intake2 = 4;
 
   public static int shooter1 = 1;
   public static int shooter2 = 2;
