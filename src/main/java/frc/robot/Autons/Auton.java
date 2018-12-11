@@ -18,9 +18,6 @@ import frc.robot.motionprofile.MotionProfileConstants;
 
 public class Auton extends CommandGroup
 {
-        /**
-         * Add your docs here.
-         */
         public Auton()
         {
                 MotionProfileConstants.kGains_Distanc = Robot.arrayToGains(SmartDashboard.getNumberArray("Distanc",
@@ -32,16 +29,7 @@ public class Auton extends CommandGroup
                 MotionProfileConstants.kGains_MotProf = Robot.arrayToGains(SmartDashboard.getNumberArray("MotProf",
                                 Robot.gainsToArray(MotionProfileConstants.kGains_MotProf)));
                 Robot.smartInit();
-                /*
-                 * SmartDashboard.putNumberArray("Distanc",
-                 * gainsToArray(MotionProfileConstants.kGains_Distanc));
-                 * SmartDashboard.putNumberArray("Turning",
-                 * gainsToArray(MotionProfileConstants.kGains_Turning));
-                 * SmartDashboard.putNumberArray("Velocit",
-                 * gainsToArray(MotionProfileConstants.kGains_Velocit));
-                 * SmartDashboard.putNumberArray("MotProf",
-                 * gainsToArray(MotionProfileConstants.kGains_MotProf));
-                 */
+
                 addSequential(new AutonDrivePathCommand(
                                 JsonParser.RetrieveProfileData(new File("/home/lvuser/Motion_Profiles/AUSA.json")),
                                 false));

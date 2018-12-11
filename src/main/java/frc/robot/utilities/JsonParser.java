@@ -17,6 +17,14 @@ import java.io.FileReader;
 
 public final class JsonParser
 {
+	/**
+	 * Reads a file off of the roborio and reads the values for motion profile and
+	 * returns them in a 2d array.
+	 * 
+	 * @param target
+	 *                   the file that contains the points that you want to be read.
+	 * @return returns an array for the motion profile.
+	 */
 
 	public static double[][] RetrieveProfileData(File target)
 	{
@@ -61,7 +69,7 @@ public final class JsonParser
 		return null;
 	}
 
-	public static String readFile(File filename)
+	private static String readFile(File filename)
 	{
 		String result = "";
 		try

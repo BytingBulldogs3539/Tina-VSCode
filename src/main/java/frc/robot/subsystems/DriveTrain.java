@@ -47,6 +47,8 @@ public class DriveTrain extends Subsystem
                 setupMotorController(br);
                 setupMotorController(bl);
 
+                setupMotorController(pigeon);
+
                 br.follow(fr);
                 bl.follow(fl);
 
@@ -57,6 +59,26 @@ public class DriveTrain extends Subsystem
                 drive.driveArcade(0, 0);
         }
 
+        /**
+         * Used to set the agitator speed.
+         * 
+         * @param output
+         *                       a value between -1.0 and 1.0 that used to set the speed
+         *                       of the motor.
+         */
+        // The agitator is included in the drive class because we need to be able to
+        // access the pigeon in this class.
+        public void driveAgi(double output)
+        {
+                pigeon.set(ControlMode.PercentOutput, output);
+        }
+
+        /**
+         * Used to configure the motor controller normally when the robot starts.
+         * 
+         * @param srx
+         *                    the talon that you would like to configure.
+         */
         private void setupMotorController(TalonSRX srx)
         {
                 srx.configNominalOutputForward(0, 0);
@@ -69,11 +91,26 @@ public class DriveTrain extends Subsystem
                 srx.configPeakCurrentDuration(100, 0);
         }
 
+        /**
+         * Used to drive the robot with a double for turning and a double for
+         * forward/backward normally used during teleop.
+         * 
+         * @param speed
+         *                      the forward/backward speed.
+         * @param turn
+         *                      the turning speed.
+         */
+
         public void arcadeDrive(double speed, double turn)
         {
                 drive.driveArcade(speed, turn);
         }
 
+        /**
+         * Used to configure the right and left talon for motion profile normally used
+         * at the beginning of auton.
+         * 
+         */
         public void initMotionProfile()
         {
                 fr.set(ControlMode.PercentOutput, 0);
@@ -254,6 +291,10 @@ public class DriveTrain extends Subsystem
                 zeroSensors();
         }
 
+        /**
+         * Used reset/zero the IMU, right, and left encoders
+         * 
+         */
         void zeroSensors()
         {
 
@@ -266,6 +307,10 @@ public class DriveTrain extends Subsystem
                 System.out.println("        [Sensors] All sensors are zeroed.\n");
         }
 
+        /**
+         * Used to set the drive talons to a disabled state
+         * 
+         */
         public void neutralMotors()
         {
                 fl.neutralOutput();
@@ -275,15 +320,33 @@ public class DriveTrain extends Subsystem
         @Override
         public void initDefaultCommand()
         {
-                // setDefaultCommand(new DriveCommand());
+                setDefaultCommand(new DriveCommand());
         }
 
+        /**
+         * Used to get the value of encoder ticks that you need to go to go x inches
+         * (uses RobotMap.wheelCir for calculation...).
+         * 
+         * @param inches
+         *                       the amount of inches you want to drive.
+         */
         public double Intoenc(double inches)
         {
                 return RobotMap.wheelCir / inches * 4096;
         }
 
-        // public void
+        /**
+         * Used to set the drive talons P, I, D, and F values.
+         * 
+         * @param p
+         *                  the P value.
+         * @param i
+         *                  the I value.
+         * @param d
+         *                  the D value.
+         * @param f
+         *                  the F value.
+         */
 
         public void setPIDF(double p, double i, double d, double f)
         {

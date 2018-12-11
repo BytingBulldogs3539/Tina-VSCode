@@ -47,8 +47,11 @@ public class OI
 
   public OI()
   {
-    // Intake button = Button a
-    // driver.buttonA.whenPressed(new IntakeCommand(1));
-    // driver.buttonA.whenReleased(new IntakeCommand(0));
+
+    driver.buttonA.whenPressed(new IntakeCommand(1));
+    driver.buttonA.whenReleased(new IntakeCommand(0));
+
+    driver.buttonB.whenPressed(new AgitatorCommand(-1));
+    driver.buttonB.whenReleased(new AgitatorCommand(0));
   }
 }

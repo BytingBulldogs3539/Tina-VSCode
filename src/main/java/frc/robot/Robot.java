@@ -14,10 +14,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Autons.Auton;
 import frc.robot.motionprofile.MotionGains;
-import frc.robot.motionprofile.MotionProfile;
 import frc.robot.motionprofile.MotionProfileConstants;
 import frc.robot.subsystems.DriveTrain;
-//import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -33,10 +33,9 @@ public class Robot extends TimedRobot
   // ToDo: on start of motion profile get the values from the smart dashboard
 
   public static OI m_oi;
-  public static DriveTrain driveTrain = new DriveTrain();
-
-  // public static Intake intake = new Intake();
-  // public static Shooter shooter = new Shooter();
+  public static DriveTrain driveTrain;
+  public static Intake intake;
+  public static Shooter shooter;
 
   Command m_autonomousCommand;
   SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -50,6 +49,10 @@ public class Robot extends TimedRobot
   {
     m_oi = new OI();
     driveTrain = new DriveTrain();
+    intake = new Intake();
+    shooter = new Shooter();
+
+    // Add the Auton command group that will run our auton from a file.
     m_chooser.addObject("My Auto", new Auton());
     SmartDashboard.putData("Auto mode", m_chooser);
   }
@@ -155,21 +158,27 @@ public class Robot extends TimedRobot
   {
   }
 
+  // Values that need to be posted to the smartdashboard in order for the robot to
+  // run.
   public static void smartInit()
-  {/*
-    * public static MotionGains kGains_Distanc = new MotionGains(0.1, 0.0, 0.0,
-    * 0.0, 100, 0.50); public static MotionGains kGains_Turning = new
-    * MotionGains(3.2, 0, 15, 0.0, 200, 1.00); public static MotionGains
-    * kGains_Velocit = new MotionGains(0.04, 0.0, 20.0, 1023.0 / 2300.0, 300,
-    * 0.50); measured 6800 velocity units at full motor output public static
-    * MotionGains kGains_MotProf = new MotionGains(.2, 0.0, 0.0, 1023.0 / 2300.0,
-    * 400, 1.00);
-    */
+  {
     SmartDashboard.putNumberArray("Distanc", gainsToArray(MotionProfileConstants.kGains_Distanc));
     SmartDashboard.putNumberArray("Turning", gainsToArray(MotionProfileConstants.kGains_Turning));
     SmartDashboard.putNumberArray("Velocit", gainsToArray(MotionProfileConstants.kGains_Velocit));
     SmartDashboard.putNumberArray("MotProf", gainsToArray(MotionProfileConstants.kGains_MotProf));
   }
+
+  /**
+   * Converts the motion gains class into an array that we can post to the
+   * smartdash.
+   * 
+   * @param Gains
+   *                the gain that you would like to convert to an array.
+   * @return returns an array of the gains object that you passed in.
+   */
+
+  // This turned out to not be useful due to the fact that for some reason you
+  // can't edit an array on the smartdashboard.
 
   public static double[] gainsToArray(MotionGains Gains)
   {
@@ -182,6 +191,15 @@ public class Robot extends TimedRobot
     arr[5] = Gains.kPeakOutput;
     return arr;
   }
+
+  /**
+   * Converts the motion gains class into an array that we can post to the
+   * smartdash.
+   * 
+   * @param arr
+   *              the gains that you would like to convert from an array.
+   * @return returns an MotionGains object of the gains array that you passed in.
+   */
 
   public static MotionGains arrayToGains(double[] arr)
   {

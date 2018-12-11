@@ -12,8 +12,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 public final class Drive
 {
-	// TODO - Add mecanum drive, holonomic drive
-
 	TalonSRX talon1, talon2, talon3, talon4, talon5, talon6;
 	DriveMode driveMode;
 
