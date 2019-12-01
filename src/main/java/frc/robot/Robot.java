@@ -47,10 +47,13 @@ public class Robot extends TimedRobot
   @Override
   public void robotInit()
   {
-    m_oi = new OI();
     driveTrain = new DriveTrain();
     intake = new Intake();
     shooter = new Shooter();
+    m_oi = new OI();
+    // driveTrain = new DriveTrain();
+    // intake = new Intake();
+    // shooter = new Shooter();
 
     // Add the Auton command group that will run our auton from a file.
     m_chooser.addObject("My Auto", new Auton());
